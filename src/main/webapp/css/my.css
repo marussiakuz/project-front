@@ -1,0 +1,34 @@
+button:disabled,
+button[disabled]{
+    filter: brightness(50%);
+    border: 1px solid #999999;
+    background-color: #cccccc;
+    color: #666666;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #1d1d1d;
+    font-family: "Crimson Text",serif;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 2rem 0 1rem;
+    text-rendering: optimizeLegibility;
+}
+
+.post-full .post-title {
+    font-size: 2.66667rem;
+    margin: 0;
+}
+.post-title {
+    font-size: 1.66667rem;
+    margin: 0 0 0.5em;
+}
+h1 {
+    font-size: 2.66667rem;
+}
+
+hr {
+    background-color: red;
+    border-color: red;
+    height: 10px;
+}
