@@ -1,11 +1,410 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <title>RPG</title>
+    <script src="//code.jquery.com/jquery.min.js"></script>
     <script src=https://code.jquery.com/jquery-3.6.0.min.js></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
     <link href="/css/my.css" rel="stylesheet">
 </head>
+
 <body>
-<h1>RPG admin panel</h1>
+<section class="vh-100" style="background-color: #eee;">
+    <div class="container h-100">
+        <h1 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4" >RPG admin panel</h1>
+        <h2 align="center" >Accounts list: </h2>
+        <div class="container">
+            <div class="g-start-2" style="grid-row: 2">
+                <div class="bd-content ps-lg-2">
+                    <div class="col-md-2">Count per page:
+                        <div class="input-group mb-3 w-50">
+                            <select id="maxRows" class="form-select" onchange="updatePageSize(value)">
+                                <option value=maxCount id="showAllRows">Show ALL</option>
+                                <option value="3" selected>3</option>
+                                <option value="5">5</option>
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class='table-responsive'>
+                        <table class="table table-success table-striped" border="1" id="players">
+                        </table>
+                    </div>
+
+                    <div id="pagination"> Pages:
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+        <hr>
+        <br>
+
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xs-11">
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
+                            <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                                <h2 class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Create new account: </h2>
+
+                                <form id="form_create" class="mx-1 mx-md-4">
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-user fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="create_name">Name</label>
+                                            <input type="text" id="create_name" class="form-control" minLength="1" maxlength="12"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="create_title">Title</label>
+                                            <input type="text" id="create_title" class="form-control" minLength="1" maxlength="30"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="create_race">Race</label>
+                                            <select id="create_race" class="race" name="race">
+                                                <option id="HUMAN" value="HUMAN">HUMAN</option>
+                                                <option id="DWARF" value="DWARF">DWARF</option>
+                                                <option id="ELF" value="ELF">ELF</option>
+                                                <option id="GIANT" value="GIANT">GIANT</option>
+                                                <option id="ORC" value="ORC">ORC</option>
+                                                <option id="TROLL" value="TROLL">TROLL</option>
+                                                <option id="HOBBIT" value="HOBBIT">HOBBIT</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="create_profession">Profession</label>
+                                            <select id="create_profession" class="race" name="race">
+                                                <option id="WARRIOR" value="WARRIOR">WARRIOR</option>
+                                                <option id="ROGUE" value="ROGUE">ROGUE</option>
+                                                <option id="SORCERER" value="SORCERER">SORCERER</option>
+                                                <option id="CLERIC" value="CLERIC">CLERIC</option>
+                                                <option id="PALADIN" value="PALADIN">PALADIN</option>
+                                                <option id="NAZGUL" value="NAZGUL">NAZGUL</option>
+                                                <option id="WARLOCK" value="WARLOCK">WARLOCK</option>
+                                                <option id="DRUID" value="DRUID">DRUID</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="create_title">Level</label>
+                                            <input type="number" id="create_level" class="form-control" min="0" max="100" step="1"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label" for="create_birthday">Birthday</label>
+                                            <input  type="date" id="create_birthday">
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-row align-items-center mb-4">
+                                        <i class="fas fa-key fa-lg me-3 fa-fw"></i>
+                                        <div class="form-outline flex-fill mb-0">
+                                            <label class="form-label">Banned</label>&emsp;
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="create_banned" value="false" id="banned_false" checked>
+                                                <label class="form-check-label" for="banned_false">False</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="create_banned" value="true" id="banned_true">
+                                                <label class="form-check-label" for="banned_true">True</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                        <button type="submit" class="btn btn-success btn-lg mb-1" >Save</button>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                            <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+                                <img src="img/save-button.png" class="img-fluid" alt="Sample image" width="300px" height="300px">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script>
+
+    //variables
+    const api_url = "http://localhost:8080/rest/players"
+    const formatter = new Intl.DateTimeFormat("en-US")
+    let maxCount
+    let pageNumber = 0
+    let pageSize = document.getElementById("maxRows").value
+    let prevButton = "<button class='btn btn-secondary' id=\"prevButton\" onclick='updatePageNumber(pageNumber - 1)'>Prev</button>"
+    let nextButton = "<button class='btn btn-secondary' id=\"nextButton\" onclick='updatePageNumber(pageNumber + 1)'>Next</button>"
+
+    //functions
+    init()
+    get(api_url)
+
+    $("#form_create").submit(function (event) {
+        event.preventDefault();
+        savePlayer();
+    })
+
+    async function init() {
+        const response = await fetch("http://localhost:8080/rest/players/count")
+        maxCount = await response.json()
+        document.getElementById("showAllRows").value = maxCount
+    }
+
+    async function updatePageSize(size) {
+        pageNumber = 0
+        pageSize = size
+        get(api_url +"?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
+    }
+
+    async function updatePageNumber(number) {
+        pageNumber = number
+        get(api_url +"?pageNumber=" + pageNumber + "&pageSize=" + pageSize)
+    }
+
+    async function get(url) {
+        const response = await fetch(url)
+        let data = await response.json()
+        createTable(data)
+        createPagination()
+    }
+
+    async function savePlayer() {
+        var obj = {};
+        obj["name"] = $("#create_name").val();
+        obj["title"] = $("#create_title").val();
+        obj["race"] = $("#create_race").val();
+        obj["profession"] = $("#create_profession").val();
+        obj["level"] = $("#create_level").val();
+        obj["birthday"] = new Date($("#create_birthday").val()).getTime();
+        obj["banned"] = document.querySelector('input[name="create_banned"]:checked').value;
+
+        $.ajax({
+            url: api_url,
+            type: 'POST',
+            data: JSON.stringify(obj),
+            contentType: 'application/json',
+            success: updatePageNumber(pageNumber)
+        });
+        location.reload(true);
+    }
+
+    async function deletePlayer(id) {
+        $.ajax({
+            method: "DELETE",
+            url: api_url + "/" + id,
+            success: updatePageNumber(pageNumber)
+        });
+        location.reload(true);
+    }
+
+    async function updatePlayer(id) {
+        document.getElementById("name_" + id).contentEditable = false;
+        document.getElementById("title_" + id).contentEditable = false;
+        document.getElementById("race_" + id).contentEditable = false;
+        document.getElementById("profession_" + id).contentEditable = false;
+        document.getElementById("banned_" + id).contentEditable = false;
+
+        let updatedName = document.getElementById("input_name_" + id).value;
+        document.getElementById("name_" + id).innerHTML = `<td id="name_${id}">${updatedName}</td>`
+
+        let updatedTitle = document.getElementById("input_title_" + id).value;
+        document.getElementById("title_" + id).innerHTML = `<td id="title_${id}">${updatedTitle}</td>`
+
+        let updatedRace = document.getElementById("select_race_" + id).value;
+        document.getElementById("race_" + id).innerHTML = `<td id="race_${id}">${updatedRace}</td>`
+
+        let updatedProfession = document.getElementById("select_profession_" + id).value;
+        document.getElementById("profession_" + id).innerHTML = `<td id="profession_${id}">${updatedProfession}</td>`
+
+        let updatedBanned = document.getElementById("select_banned_" + id).value;
+        document.getElementById("banned_" + id).innerHTML = `<td id="banned_${id}">${updatedBanned}</td>`
+
+        $.ajax({
+            url: api_url + `/${id}`,
+            type: 'POST',
+            data: rowToJSON(id),
+            contentType: 'application/json',
+            success: updatePageNumber(pageNumber)
+        });
+        location.reload(true);
+    }
+
+    function rowToJSON(id) {
+        var row = document.getElementById("players_thead");
+        var obj = {};
+
+        for (let i = 1; i < row.cells.length - 2; i++) {
+            if (i === 5 || i=== 6) continue;
+            obj[row.cells[i].textContent.toLowerCase()] = document.getElementById("player_info_" + id).cells[i].textContent;
+        }
+        return JSON.stringify(obj);
+    }
+
+    async function editPlayerInfo(id) {
+        for (let i = 0; i < document.getElementsByClassName("edit_button").length; i++) {
+            console.log(document.getElementsByClassName("edit_button").length)
+            if (document.getElementsByClassName("edit_button").item(i).id == "edit_" + id) continue
+            document.getElementsByClassName("edit_button").item(i).disabled = true
+        }
+        for (let i = 0; i < document.getElementsByClassName("delete_button").length; i++) {
+            console.log(document.getElementsByClassName("delete_button").length)
+            document.getElementsByClassName("delete_button").item(i).disabled = true
+        }
+
+        document.getElementById("img_edit_" + id).src = "img/save-button.png";
+        document.getElementById("img_edit_" + id).onclick = updatePlayer(id)
+
+        let name = document.getElementById("name_" + id);
+        name.contentEditable = true;
+        name.innerHTML = `<input id="input_name_${id}" value=${name.textContent} placeholder=${name.textContent} type=\"text\" minLength=\"1\" maxlength=\"12\">`;
+
+        let title = document.getElementById("title_" + id);
+        title.contentEditable = true;
+        title.innerHTML = `<input id="input_title_${id}" value=${title.textContent} placeholder=${title.textContent} type=\"text\" minLength=\"1\" maxlength=\"30\">`;
+
+        let race = document.getElementById("race_" + id);
+        let race_old = race.textContent;
+        race.contentEditable = true;
+        race.innerHTML = `<select id="select_race_${id}" class="form-select">
+                <option id="HUMAN" value="HUMAN">HUMAN</option>
+                <option id="DWARF" value="DWARF">DWARF</option>
+                <option id="ELF" value="ELF">ELF</option>
+                <option id="GIANT" value="GIANT">GIANT</option>
+                <option id="ORC" value="ORC">ORC</option>
+                <option id="TROLL" value="TROLL">TROLL</option>
+                <option id="HOBBIT" value="HOBBIT">HOBBIT</option>
+        </select>`
+        document.getElementById(race_old).selected = true;
+
+        let profession = document.getElementById("profession_" + id);
+        let profession_old = profession.textContent;
+        profession.contentEditable = true;
+        profession.innerHTML = `<select id="select_profession_${id}" id="profession" class="form-select">
+                <option id="WARRIOR" value="WARRIOR">WARRIOR</option>
+                <option id="ROGUE" value="ROGUE">ROGUE</option>
+                <option id="SORCERER" value="SORCERER">SORCERER</option>
+                <option id="CLERIC" value="CLERIC">CLERIC</option>
+                <option id="PALADIN" value="PALADIN">PALADIN</option>
+                <option id="NAZGUL" value="NAZGUL">NAZGUL</option>
+                <option id="WARLOCK" value="WARLOCK">WARLOCK</option>
+                <option id="DRUID" value="DRUID">DRUID</option>
+        </select>`
+        document.getElementById(profession_old).selected = true;
+
+        let banned = document.getElementById("banned_" + id);
+        let banned_old = banned.textContent;
+        banned.contentEditable = true;
+        banned.innerHTML = `<select id="select_banned_${id}" id="banned" class="form-select">
+                <option id="false" value="false">false</option>
+                <option id="true" value="true">true</option>
+        </select>`
+        document.getElementById(banned_old).selected = true
+    }
+
+    function createTable(data) {
+        document.getElementById("players").innerHTML =
+            `<thead>
+                 <tr id="players_thead">
+                     <th scope="col">#</th>
+                     <th scope="col">Name</th>
+                     <th scope="col">Title</th>
+                     <th scope="col">Race</th>
+                     <th scope="col">Profession</th>
+                     <th scope="col">Level</th>
+                     <th scope="col">Birthday</th>
+                     <th scope="col">Banned</th>
+                     <th scope="col">Edit</th>
+                     <th scope="col">Delete</th>
+                 </tr>
+             </thead>
+             <tbody id="tbody">`
+
+        data.forEach(function (player) {
+            document.getElementById("players").innerHTML +=
+                `<tr id="player_info_${player.id}">
+                     <th scope="row">${player.id}</th>
+                     <td id="name_${player.id}">${player.name}</td>
+                     <td id="title_${player.id}">${player.title}</td>
+                     <td id="race_${player.id}">${player.race}</td>
+                     <td id="profession_${player.id}">${player.profession}</td>
+                     <td>${player.level}</td>
+                     <td>${formatter.format(new Date(player.birthday))}</td>
+                     <td id="banned_${player.id}">${player.banned}</td>
+                     <td>
+                         <button class="edit_button" id = "edit_${player.id}" onclick="editPlayerInfo(${player.id})">
+                             <img id = "img_edit_${player.id}" src="img/edit-button.png" width="40px" height="40px">
+                         </button>
+                     </td>
+                     <td>
+                         <button class="delete_button" id = "delete_${player.id}" onclick="deletePlayer(${player.id})">
+                             <img id = "img_delete_${player.id}" src="img/delete-button.jpeg" width="40px" height="40px">
+                         </button>
+                     </td>
+                 </tr>
+                 </tbody>`;
+        });
+
+        document.getElementById("players").innerHTML += '</tr>';
+    }
+
+    function createPagination() {
+        let countOfPages = Math.ceil(maxCount / pageSize);
+        $("button.btn.btn-secondary").remove();
+
+        $('#pagination').append(prevButton);
+
+        for (let i = 0; i < countOfPages; i++) {
+            let teg = `<button value=${i}>${i + 1}</button>`;
+
+            let button = $(teg)
+                .attr('id', "button_" + i)
+                .attr('onclick', "updatePageNumber("+ i + ")")
+                .addClass('btn btn-secondary')
+
+            $('#pagination').append(button);
+        }
+
+        $('#pagination').append(nextButton);
+
+        let pressed = "#button_" + pageNumber;
+        $(pressed).css('color', "red");
+
+        document.getElementById("prevButton").disabled = pageNumber === 0;
+        document.getElementById("nextButton").disabled = pageNumber === countOfPages - 1;
+    }
+
+</script>
 
 </body>
+
 </html>
